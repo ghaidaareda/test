@@ -18,7 +18,6 @@ int main(int ac, char **argv)
 	int token_num = 0;
 	char *token;
 	int i;
-	int counter = 0;
 	(void) ac;
 	while (5)
 	{
@@ -52,14 +51,11 @@ int main(int ac, char **argv)
 			token = strtok(NULL, delim);
 		}
 		argv[i] = NULL;
-		for (counter = 0; counter < token_num -1; counter++)
-		{
-			printf("%s\n", argv[counter]);
-		}
-
-		free(argv);
-		free(lineptr_copy);
-		free(lineptr);
+		execute(argv);
+		getenv("PATH");
 	}
+		free(argv);
+                free(lineptr_copy);
+                free(lineptr);
 	return (0);
 }

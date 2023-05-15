@@ -11,5 +11,6 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
-
+void execute(char**argv);
+char *which_like(char *command);
 #endif
