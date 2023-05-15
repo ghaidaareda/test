@@ -10,7 +10,7 @@
 
 int main(int ac, char **argv)
 {
-	char *shell_prompt = "our_shell$";
+	char *shell_prompt = "our_shell$ ";
 	char *lineptr = NULL; char *lineptr_copy = NULL;
 	size_t n = 0;
 	ssize_t char_num;
@@ -18,6 +18,7 @@ int main(int ac, char **argv)
 	int token_num = 0;
 	char *token;
 	int i;
+	pid_t child;
 	(void) ac;
 	while (5)
 	{
@@ -51,7 +52,20 @@ int main(int ac, char **argv)
 			token = strtok(NULL, delim);
 		}
 		argv[i] = NULL;
-		execute(argv);
+		child = fork();
+                if (child == -1)
+                {
+                        free(lineptr), exit(EXIT_FAILURE);
+                }
+                if (child == 0)
+                {
+		execute(argv); 
+		printf("%s: No such file or directory\n", argv[0]);
+                }
+                else
+                {
+                        wait(NULL);
+                }
 		getenv("PATH");
 	}
 		free(argv);
