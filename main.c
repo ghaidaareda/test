@@ -26,16 +26,8 @@ int main(int ac, char **argv)
 		char_num = getline(&lineptr, &n, stdin);
 		 if (char_num == -1)
                 {
-			if (feof(stdin))
-			{
-				exit(EXIT_SUCCESS);
-			}
-			else
-			{
-				perror("error in reading");
-				exit(EXIT_FAILURE);
-			}
 		printf("Exit\n");
+		free(lineptr);
 		return (-1); EXIT_FAILURE;
                 }
 		 lineptr[strcspn(lineptr, "\n")] = '\0';
