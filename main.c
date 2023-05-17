@@ -24,11 +24,21 @@ int main(int ac, char **argv)
 	{
 		printf("%s", shell_prompt);
 		char_num = getline(&lineptr, &n, stdin);
-		if (char_num == -1)
-		{
-			printf("Exit\n");
-			return (-1);
-		}
+		 if (char_num == -1)
+                {
+			if (feof(stdin))
+			{
+				exit(EXIT_SUCCESS);
+			}
+			else
+			{
+				perror("error in reading");
+				exit(EXIT_FAILURE);
+			}
+		printf("Exit\n");
+		return (-1); EXIT_FAILURE;
+                }
+		 lineptr[strcspn(lineptr, "\n")] = '\0';
 		lineptr_copy = malloc(sizeof(char) * char_num);
 		if (lineptr_copy == NULL)
 		{
@@ -52,6 +62,11 @@ int main(int ac, char **argv)
 			token = strtok(NULL, delim);
 		}
 		argv[i] = NULL;
+
+                        if (is_builtin(argv))
+                        {
+                        exit_shell();
+                        }
 		child = fork();
                 if (child == -1)
                 {
@@ -65,10 +80,11 @@ int main(int ac, char **argv)
                 else
                 {
                         wait(NULL);
-                }
+           }
 		getenv("PATH");
 	}
 		free(argv);
+	
                 free(lineptr_copy);
                 free(lineptr);
 	return (0);

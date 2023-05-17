@@ -13,4 +13,6 @@
 #include <string.h>
 void execute(char**argv);
 char *which_like(char *command);
+void exit_shell();
+int is_builtin(char **argv);
 #endif
