@@ -1,7 +1,10 @@
 #include "main.h"
-/** which_like-get path of the command
- * Return:path
- * @command:command entered by user
+
+/**
+ * which_like - get path of the command
+ *
+ * Return: path if exist or NULL if not
+ * @command : command entered by user
  */
 char *which_like(char *command)
 {
@@ -9,7 +12,7 @@ char *which_like(char *command)
 	int command_len, directory_len;
 	struct stat buff;
 
-	path = getenv("PATH");
+	path = _getenv("PATH");
 	if (path)
 	{
 		path_cp = strdup(path);
@@ -43,3 +46,24 @@ char *which_like(char *command)
 	}
 	return (NULL);
 }
+
+/**
+ * _getenv - function to get to environment variables
+ * @var : path
+ *
+ * Return: environ if exist, null if not
+ */
+
+char *_getenv(const char *var)
+{
+	int index, len;
+
+	len = strlen(var);
+	for (index = 0; environ[index]; index++)
+	{
+		if (strncmp(var, environ[index], len) == 0)
+			return (environ[index]);
+	}
+
+	return (NULL);
+}                

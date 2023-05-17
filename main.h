@@ -11,8 +11,10 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
+extern char **environ;
 void execute(char**argv);
 char *which_like(char *command);
 void exit_shell();
 int is_builtin(char **argv);
+char *_getenv(const char *var);
 #endif
