@@ -1,19 +1,29 @@
 #include "main.h"
 
-void read_input(char **lineptr, size_t *n) {
-    ssize_t char_num = getline(lineptr, n, stdin);
+void read_input(char **lineptr, size_t *n) 
+{
+    ssize_t char_num;
+   char_num = getline(lineptr, n, stdin);
     if (char_num == -1) {
         perror("Exit\n");
         exit(EXIT_FAILURE);
     }
-    (*lineptr)[strcspn(*lineptr, "\n")] = '\0';
 }
 
 char **parse_input(char *line, const char *delim, int *token_num) {
     char *token;
     int i;
     char **argv;
-    *token_num = 0;
+    char *line_copy;
+    size_t n = strlen(line) + 1;
+ *token_num = 0;
+    line_copy = malloc(sizeof(char) * n);
+                if (line_copy == NULL)
+                {
+                        perror("memory allocation error\n");
+                        exit(EXIT_FAILURE);
+                }
+                strcpy(line_copy, line);
     token = strtok(line, delim);
     while (token != NULL) {
         (*token_num)++;
@@ -21,9 +31,14 @@ char **parse_input(char *line, const char *delim, int *token_num) {
     }
     (*token_num)++;
     argv = malloc(sizeof(char*) * (*token_num));
-    token = strtok(line, delim);
+    token = strtok(line_copy, delim);
     for (i = 0; token != NULL; i++) {
-        argv[i] = strdup(token);
+        argv[i] = malloc(sizeof(char) * strlen(token));
+        if (argv[i] == NULL) {
+            perror("memory allocation error\n");
+            exit(EXIT_FAILURE);
+        }
+                        strcpy(argv[i], token);
         token = strtok(NULL, delim);
     }
     argv[i] = NULL;
