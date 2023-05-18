@@ -5,7 +5,3 @@ void exit_shell()
     fflush(stdout);
     exit(0);
 }
-
-int is_builtin(char **argv){
-    return strcmp(argv[0], "exit") == 0;
-}
