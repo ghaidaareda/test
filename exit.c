@@ -7,6 +7,7 @@ void exit_shell()
     exit(0);
 }
 
-int is_builtin(char **argv){
+int exit_command(char **argv)
+{
     return strcmp(argv[0], "exit") == 0;
 }
