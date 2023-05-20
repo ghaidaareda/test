@@ -15,7 +15,7 @@ char **parse_input(char *line, const char *delim, int *token_num)
 {
 	char *token;
 	int i;
-	char **argv;
+	char **argv = NULL;
 	char *line_copy;
 	size_t n = strlen(line) + 1;
 
@@ -31,20 +31,40 @@ char **parse_input(char *line, const char *delim, int *token_num)
 	while (token != NULL)
 	{
 		(*token_num)++;
+		if (strcmp(token, "cd") == 0)
+		{
+			is_builtin(argv);
+		}
 		token = strtok(NULL, delim);
 	}
 	(*token_num)++;
 	argv = malloc(sizeof(char*) * (*token_num));
+	if (argv == NULL)
+	{
+	    perror("memory allocation error\n");
+	    exit(EXIT_FAILURE);
+	}
+	*token_num = 0;
+	strcpy(line_copy, line);
 	token = strtok(line_copy, delim);
 	for (i = 0; token != NULL; i++)
 	{
-        	argv[i] = malloc(sizeof(char) * strlen(token));
+		if (strcmp(token, "cd") == 0)
+		{
+			is_builtin(argv);
+			argv[i] = NULL;
+		}
+		else
+		{
+        	argv[i] = malloc(sizeof(char) * (strlen(token) + 1 ));
         	if (argv[i] == NULL)
 		{
 			perror("memory allocation error\n");
 			exit(EXIT_FAILURE);
 		}
-	strcpy(argv[i], token);
+		strcpy(argv[i], token);
+		}
+		(*token_num)++;
         token = strtok(NULL, delim);
 	}
 	argv[i] = NULL;
@@ -54,9 +74,9 @@ int execute_command(char **argv)
 {
 
 	pid_t child;
-	if (is_builtin(argv))
+	if (argv[0] == NULL)
 	{
-		return (0);
+	return 0;
 	}
 	if (exit_command(argv))
 	{
@@ -74,7 +94,7 @@ int execute_command(char **argv)
 		printf("%s: No such file or directory\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
-	else
+	else 
 	{
 		wait(NULL);
 	}
@@ -82,9 +102,15 @@ int execute_command(char **argv)
 }
 void cleanup(char **argv, char *lineptr, char *lineptr_copy)
 {
-	free(argv);
 	free(lineptr_copy);
 	free(lineptr);
+	if (argv != NULL) {
+        int i;
+        for (i = 0; argv[i] != NULL; i++) {
+            free(argv[i]);
+        }
+        free(argv);
+    }
 }
 
 int main(int ac, char **argv)

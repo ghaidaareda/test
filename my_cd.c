@@ -1,13 +1,18 @@
 #include "main.h"
+#include <limits.h>
 /*
  *
  *
  */
 int my_cd(char **args)
 {
-	char *cwd;
+	char cwd[PATH_MAX];
 
-	if (chdir(args[1]) == 0)
+	if (args == NULL || args[0] == NULL)
+       	{
+		return (-1);
+	}
+	else if (chdir(args[1]) == 0)
 	{ 
 		if (args[1] == NULL || strcmp(args[1], "~") == 0)
 		{
@@ -32,16 +37,11 @@ int my_cd(char **args)
 		perror("cd");
 		return (-1);
 	}
-	cwd = getcwd(NULL, 0);
-	if (cwd != NULL)
-	{
-		setenv("PWD", cwd, 1);
-		free(cwd);
-	}
-	else
-	{
-	perror("cd: could not get current directory\n");
-        return (-1);
-    	}
+        if (getcwd(cwd, sizeof(cwd)) == NULL)
+        {
+                return (-1);
+        }
+	setenv("OLDPWD", getenv("PWD"), 1);
+	setenv("PWD", cwd, 1);
 	return(0);
 }
