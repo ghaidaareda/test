@@ -15,17 +15,17 @@ char *which_like(char *command)
 	path = _getenv("PATH");
 	if (path)
 	{
-		path_cp = strdup(path);
-		command_len = strlen(command);
-		path_token = strtok(path_cp, ":");
+		path_cp = _strdup(path);
+		command_len = _strlen(command);
+		path_token = _strtok(path_cp, ":");
 		while (path_token != NULL)
 		{
-			directory_len = strlen(path_token);
+			directory_len = _strlen(path_token);
 			file_path = malloc(command_len + directory_len + 2);
-			strcpy(file_path, path_token);
-			strcat(file_path, "/");
-			strcat(file_path, command);
-			strcat(file_path, "\0");
+			_strcpy(file_path, path_token);
+			_strcat(file_path, "/");
+			_strcat(file_path, command);
+			_strcat(file_path, "\0");
 			if (stat(file_path, &buff) == 0)
 			{
 				free(path_cp);
@@ -34,36 +34,53 @@ char *which_like(char *command)
 			else
 			{
 				free(file_path);
-				path_token = strtok(NULL, ":");
+				path_token = _strtok(NULL, ":");
 			}
 		}
-	free(path_cp);
-	if (stat(command, &buff) == 0)
+		free(path_cp);
+	}
+	if (stat(command, &buff) == 0 && (buff.st_mode & S_IXUSR))
 	{
 		return (command);
 	}
-	return (NULL);
+	else
+	{
+		return (NULL);
 	}
-	return (NULL);
 }
 
 /**
- * _getenv - function to get to environment variables
- * @var : path
+ * _getenv - Get an environment variable.
+ * @name: Variable to look for
  *
- * Return: environ if exist, null if not
+ * Return: The environnment variable, if not found NULL
  */
 
-char *_getenv(const char *var)
+char *_getenv(const char *name)
 {
-	int index, len;
+	int i = 0, y, count = 0, length;
+	char *copy = (char *)name;
 
-	len = strlen(var);
-	for (index = 0; environ[index]; index++)
+	if (name == NULL || !name[i])
+		return (NULL);
+
+	length = _strlen(copy);
+	while (*(environ + i))
 	{
-		if (strncmp(var, environ[index], len) == 0)
-			return (environ[index]);
+		y = 0;
+		while (*(*(environ + i) + y) != '=')
+		{
+			if (*(*(environ + i) + y) == name[y])
+				count++;
+			y++;
+		}
+		if (count == length)
+		{
+			y++;
+			return (*(environ + i) + y);
+		}
+		i++;
+		count = 0;
 	}
-
 	return (NULL);
-}                
+}

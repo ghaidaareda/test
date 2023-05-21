@@ -1,6 +1,8 @@
 #ifndef MAIN_h_
 #define MAIN_h_
 
+#define MAX_ARGU 128
+
 #include <stddef.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -11,18 +13,32 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
+
 extern char **environ;
-int my_cd(char **args);
-void execute(char**argv);
+
+void execute_command(char** argument, char** env, char* av[]);
+void start_shell(char **av, char **env);
 char *which_like(char *command);
-void exit_shell();
-int is_builtin(char **argv);
-char *_getenv(const char *var);
-int execute_command(char **argv);
-int exit_command(char **argv);
-int main(int ac, char **argv);
-void read_input(char **lineptr, size_t *n);
-char **parse_input(char *line, const char *delim, int *token_num);
-void cleanup(char **argv, char *lineptr, char *lineptr_copy);
+void execute(char**argv);
+char *_getenv(const char *name);
+void print_env(void);
+void _puts(char *s);
+void execute_command(char **argument, char **env, char *av[]);
+char *_getline(void);
+int my_cd(char **argument);
+
+/**string functions */
+
+char *_strcpy(char *dest, char *src);
+int _strlen(char *s);
+char *_strncat(char *dest, char *src, int n);
+int _strcmp(char *s1, char *s2);
+unsigned int _strspn(char *s, char *accept);
+char *_strdup(char *str);
+void _puts(char *s);
+char *_strcat(char *dest, char *src);
+
+char *_strtok(char *line, char *delim);
+
 
 #endif

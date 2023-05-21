@@ -4,43 +4,43 @@
  *
  *
  */
-int my_cd(char **args)
+int my_cd(char **argument)
 {
 	char cwd[PATH_MAX];
 
-	if (args == NULL || args[0] == NULL)
+	if (argument == NULL || argument[0] == NULL || strcmp(argument[0], "cd") != 0)
        	{
 		return (-1);
 	}
-	else if (chdir(args[1]) == 0)
-	{ 
-		if (args[1] == NULL || strcmp(args[1], "~") == 0)
-		{
-			chdir(getenv("HOME"));
-		}
-		else if (strcmp(args[1], "-") == 0)
-		{
-			if (getenv("OLDPWD") != NULL)
-			{
-				chdir(getenv("OLDPWD"));
-				return (0);
-			}
+	if (argument[1] == NULL || strcmp(argument[1], "~") == 0)
+                {
+                        chdir(getenv("HOME"));
+                }
+	 else if (strcmp(argument[1], "-") == 0)
+                {
+                        if (getenv("OLDPWD") != NULL)
+                        {
+                                chdir(getenv("OLDPWD"));
+                        }
 			else
-			{
-				perror("cd: OLDPWD not set\n");
-				return (-1);
-			}
+                        {
+                                fprintf(stderr, "cd: OLDPWD not set\n");
+                                return (-1);
+                        }
 		}
-	}
-	else if (chdir(args[1]) != 0)
+	else
 	{
-		perror("cd");
-		return (-1);
+		if(chdir(argument[1]) == -1)
+        {
+                perror("cd");
+                return (-1);
+        }
 	}
         if (getcwd(cwd, sizeof(cwd)) == NULL)
         {
                 return (-1);
         }
+	printf("%s\n", cwd);
 	setenv("OLDPWD", getenv("PWD"), 1);
 	setenv("PWD", cwd, 1);
 	return(0);
