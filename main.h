@@ -1,7 +1,7 @@
 #ifndef MAIN_h_
 #define MAIN_h_
 
-#define MAX_ARGU 128
+#define MAX_ARGU 1024
 
 #include <stddef.h>
 #include <sys/types.h>
@@ -14,6 +14,7 @@
 #include <errno.h>
 #include <string.h>
 
+
 extern char **environ;
 
 void execute_command(char** argument, char** env, char* av[]);
@@ -24,9 +25,13 @@ char *_getenv(const char *name);
 void print_env(void);
 void _puts(char *s);
 void execute_command(char **argument, char **env, char *av[]);
+char **split_line(char *line, const char *delim);
+void _echo(void);
 char *_getline(void);
 int my_cd(char **argument);
-
+void handler(int sig __attribute__((unused)));
+void execute_builtin_command(char **argument, char **env, char *av[]);
+void execute_external_command(char **argument, char **env, char *av[]);
 /**string functions */
 
 char *_strcpy(char *dest, char *src);

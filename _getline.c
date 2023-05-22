@@ -16,9 +16,16 @@ char *_getline(void)
             return NULL;
         }
     }
+    if (c == EOF)
+    {
+        write(1, "\n", 1);
+    }
 
     if (pos == 0 && c == EOF) {
         return NULL;
+    }
+    if (buffer[pos-1] == '\n') {
+        write(1, "\n", 1);
     }
 
     buffer[pos] = '\0';
