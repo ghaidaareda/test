@@ -9,45 +9,51 @@
 
 char *which_like(char *command)
 {
-	char *path, *path_cp, *path_token, *file_path;
-	int command_len, directory_len;
-	struct stat buff;
+	char *path_cp, *token;
+	char *path;
+	int command_len, path_len, original_path_len;
+	char *fullpath;
 
-	path = _getenv("PATH");
-	if (path)
-	{
-		path_cp = strdup(path);
+		path = _getenv("PATH");
 		command_len = strlen(command);
-		path_token = strtok(path_cp, ":");
-		while (path_token != NULL)
+		original_path_len = _strlen(path);
+		path_cp = malloc(sizeof(char) * original_path_len + 1);
+		if (path_cp == 	NULL)
 		{
-			directory_len = strlen(path_token);
-			file_path = malloc(command_len + directory_len + 2);
-			strcpy(file_path, path_token);
-			strcat(file_path, "/");
-			strcat(file_path, command);
-			strcat(file_path, "\0");
-			if (stat(file_path, &buff) == 0)
+			perror("cant malloc path cp");
+			return (NULL);
+		}
+		strcpy(path_cp, path);
+		token = strtok(path_cp, ":");
+		if (token == NULL)
+		{
+			token = strtok(NULL, ":");
+		}
+		while (token != NULL)
+		{
+			path_len = strlen(token);
+			fullpath = malloc(sizeof(char) * (path_len + command_len) + 2);
+			if (fullpath == NULL)
 			{
-				free(path_cp);
-				return (file_path);
+				perror("cant malloc path cp");
+                        	return (NULL);
+			}
+			strcpy(fullpath, token);
+			fullpath[path_len] = '/';
+			strcpy(fullpath + path_len + 1, command);
+			fullpath[path_len + command_len + 1] = '\0';
+			if (access(fullpath, X_OK) != 0)
+			{
+				free(fullpath);
+				fullpath = NULL;
+				token = strtok(NULL, ":");
 			}
 			else
-			{
-				free(file_path);
-				path_token = strtok(NULL, ":");
-			}
+				break;
 		}
 	free(path_cp);
-	if (stat(command, &buff) == 0)
-	{
-		return (command);
-	}
-	return (NULL);
-	}
-	return (NULL);
+	return (fullpath);
 }
-
 /**
  * _getenv - function to get to environment variables
  * @var : path
