@@ -8,26 +8,16 @@
  *
  * Return: void
  */
-void execute_external_command(char **argument, char **env, char *av[])
+int execute_external_command(char *fullpath, char **token, char **env)
 {
 	pid_t child_pid;
 	int child_status;
-	char *command_path;
 
-	command_path = which_like(argument[0]);
-	if (command_path == NULL)
+	if (fullpath == NULL)
 	{
-		if (errno == ENOENT)
-		{
-			write(STDERR_FILENO,"./hsh: No such file or directory\n", 34);
-		}
-		else
-		{
-			perror(av[0]);
-		}
-		return;
+		write(STDERR_FILENO,"./hsh: No such file or directory\n", 34);
+		return (-1);
 	}
-
 	child_pid = fork();
 	if (child_pid == -1)
 	{
@@ -37,19 +27,16 @@ void execute_external_command(char **argument, char **env, char *av[])
 	}
 	if (child_pid == 0)
 	{
-		if (execve(command_path, argument, env) == -1)
+		if (execve(fullpath, token, env) == -1)
 		{
-			perror(av[0]);
-			free(command_path);
+			perror(0);
+			free(fullpath);
 			exit(errno);
 		}
 	}
 	else
-	{
 		waitpid(child_pid, &child_status, WUNTRACED);
-	}
-
-	
+	return (0);
 }
 
 /**
@@ -91,6 +78,6 @@ void execute_builtin_command(char **argument, char **env, char *av[])
 	}
 	else
 	{
-		execute_external_command(argument, env, av);
+		execute_external_command(fullpath, token, env);
 	}
 }
