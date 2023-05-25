@@ -30,8 +30,8 @@ void _echo(void);
 char *_getline(void);
 int my_cd(char **argument);
 void handler(int sig __attribute__((unused)));
-void execute_builtin_command(char **argument, char **env, char *av[]);
-int execute_external_command(char **fullpath, char **token, char **env);
+void execute_builtin_command(char **argument, char **env, char *av[], char *fullpath);
+int execute_external_command(char *fullpath, char **token, char **env);
 void non_interactive(char **av, char **env);
 /**string functions */
 

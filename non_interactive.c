@@ -15,6 +15,7 @@ void non_interactive(char **av, char **env)
         int i = 0;
         char *argument[MAX_ARGU];
 	FILE *fp;
+	char *fullpath;
 
 	fp = fopen(av[1], "r");
     	if (!fp)
@@ -40,7 +41,7 @@ void non_interactive(char **av, char **env)
                         }
                         argument[++i] = _strtok(NULL, delim);
                 }
-                execute_builtin_command(argument, env, av);
+                execute_builtin_command(argument, env, av, fullpath);
         }
 	fclose(fp);
 }

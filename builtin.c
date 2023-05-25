@@ -22,7 +22,7 @@ int execute_external_command(char *fullpath, char **token, char **env)
 	if (child_pid == -1)
 	{
 		perror("fork");
-		free(command_path);
+		free(fullpath);
 	       	exit(EXIT_FAILURE);
 	}
 	if (child_pid == 0)
@@ -47,7 +47,7 @@ int execute_external_command(char *fullpath, char **token, char **env)
  *
  * Return: void
  */
-void execute_builtin_command(char **argument, char **env, char *av[])
+void execute_builtin_command(char **argument, char **env, char *av[], char *fullpath)
 {
 	if (argument == NULL || argument[0] == NULL)
 	{
@@ -78,6 +78,6 @@ void execute_builtin_command(char **argument, char **env, char *av[])
 	}
 	else
 	{
-		execute_external_command(fullpath, token, env);
+		execute_external_command(fullpath, argument, env);
 	}
 }

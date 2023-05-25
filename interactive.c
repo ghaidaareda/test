@@ -13,6 +13,7 @@ void start_shell(char **av, char **env)
 	char *lineptr = NULL, *delim = " \t\n\r";
 	int i = 0;
 	char *argument[MAX_ARGU];
+	char *fullpath;
 
 	signal(SIGINT, handler);
 	while (1)
@@ -40,7 +41,7 @@ void start_shell(char **av, char **env)
 				}
 				argument[++i] = _strtok(NULL, delim);
 			}
-			execute_builtin_command(argument, env, av);
+			execute_builtin_command(argument, env, av, fullpath);
 		}
 	}
 	free(lineptr);
