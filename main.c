@@ -19,7 +19,7 @@ int main(int ac, char **av, char **env)
 	}
 	else
 	{
-		start_shell(av, env);
+		start_shell(env);
 	}
 	return (0);
 }

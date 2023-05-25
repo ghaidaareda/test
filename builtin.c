@@ -47,21 +47,21 @@ int execute_external_command(char *fullpath, char **token, char **env)
  *
  * Return: void
  */
-void execute_builtin_command(char **argument, char **env, char *av[], char *fullpath)
+int execute_builtin_command(char **argument, char **env, char *fullpath)
 {
 	if (argument == NULL || argument[0] == NULL)
 	{
-		return;
+		return (-1);
 	}
 	else if (_strcmp("echo", argument[0]) == 0 && _strcmp("$$", argument[1]) == 0)
 	{
 		_echo();
-		return;
+		return (0);
 	}
 	else if (_strcmp("env", argument[0]) == 0)
 	{
 		print_env();
-		return;
+		return (0);
 	}
 	else if (_strcmp(argument[0], "exit") == 0)
 	{
@@ -69,15 +69,16 @@ void execute_builtin_command(char **argument, char **env, char *av[], char *full
 	}
 	else if (_strcmp(argument[0], "#") == 0)
 	{
-		return;
+		return (0);
 	}
 	else if (_strcmp("cd", argument[0]) == 0)
 	{
 		my_cd(argument);
-		return;
+		return (0);
 	}
 	else
 	{
 		execute_external_command(fullpath, argument, env);
 	}
+	return (0);
 }

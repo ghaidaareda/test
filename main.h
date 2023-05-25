@@ -18,7 +18,7 @@
 extern char **environ;
 
 void execute_command(char** argument, char** env, char* av[]);
-void start_shell(char **av, char **env);
+int start_shell(char **env);
 char *which_like(char *command);
 void execute(char**argv);
 char *_getenv(const char *name);
@@ -30,9 +30,10 @@ void _echo(void);
 char *_getline(void);
 int my_cd(char **argument);
 void handler(int sig __attribute__((unused)));
-void execute_builtin_command(char **argument, char **env, char *av[], char *fullpath);
+int execute_builtin_command(char **argument, char **env, char *fullpath);
 int execute_external_command(char *fullpath, char **token, char **env);
 void non_interactive(char **av, char **env);
+char **parse_input(char *line, const char *delim, int *token_num);
 /**string functions */
 
 char *_strcpy(char *dest, char *src);

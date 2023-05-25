@@ -41,7 +41,7 @@ void non_interactive(char **av, char **env)
                         }
                         argument[++i] = _strtok(NULL, delim);
                 }
-                execute_builtin_command(argument, env, av, fullpath);
+                execute_builtin_command(argument, env, fullpath);
         }
 	fclose(fp);
 }
