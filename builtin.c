@@ -19,7 +19,7 @@ void execute_external_command(char **argument, char **env, char *av[])
 	{
 		if (errno == ENOENT)
 		{
-			fprintf(stderr, "%s: %s: command not found\n", av[0], argument[0]);
+			write(STDERR_FILENO,"./hsh: No such file or directory\n", 34);
 		}
 		else
 		{
@@ -32,13 +32,15 @@ void execute_external_command(char **argument, char **env, char *av[])
 	if (child_pid == -1)
 	{
 		perror("fork");
-		free(argument), exit(EXIT_FAILURE);
+		free(command_path);
+	       	exit(EXIT_FAILURE);
 	}
 	if (child_pid == 0)
 	{
 		if (execve(command_path, argument, env) == -1)
 		{
 			perror(av[0]);
+			free(command_path);
 			exit(errno);
 		}
 	}

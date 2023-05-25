@@ -14,8 +14,15 @@ void non_interactive(char **av, char **env)
         char *delim = " \t\n\r";
         int i = 0;
         char *argument[MAX_ARGU];
+	FILE *fp;
 
-        while (fgets(buffer, sizeof(buffer), stdin) != NULL)
+	fp = fopen(av[1], "r");
+    	if (!fp)
+    	{
+        perror(av[1]);
+        return;
+    	}
+        while (fgets(buffer, sizeof(buffer), fp) != NULL)
         {
                 i = 0;
                 argument[i] = _strtok(buffer, delim);
@@ -35,4 +42,5 @@ void non_interactive(char **av, char **env)
                 }
                 execute_builtin_command(argument, env, av);
         }
+	fclose(fp);
 }
