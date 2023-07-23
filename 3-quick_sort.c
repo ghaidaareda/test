@@ -25,10 +25,10 @@ int partition(int *array, size_t start, size_t end)
 		if (array[j] <= pivot)
 		{
 			i++;
-			swap(&array[j], &array[i]);
-			print_array(array + start ,i - start + 1);
+			swap(&array[i], &array[j]);
 		}
 	}
+	print_array(array ,end - 0 + 1);
 	swap(&array[i + 1], &array[end]);
 	return (i + 1);
 }
