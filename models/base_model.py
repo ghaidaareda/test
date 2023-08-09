@@ -6,6 +6,7 @@ attributes/methods for other classes
 
 from uuid import uuid4
 from datetime import datetime
+from models import storage
 class BaseModel:
     """ main class of prject """
     def __init__(self, *args, **kwargs):
@@ -24,6 +25,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            storage.new(self)
     def __str__(self):
         """ string representation of class """
         return f"[{self.__class__.__name__}]({self.id}) {self.__dict__}"
@@ -31,6 +33,7 @@ class BaseModel:
     def save(self):
         """ updates the public instance attribute updated_at"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """ returns a dictionary containing all keys/values """
