@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block tilte %} 
+    {{post.title}}
+{%endblock%}</title>
+{% block content %}
+
+
+<h1>{{ post.title}}</h1>
+<small> BY:{{ post.author.first_name}} {{ post.author.last_name}}</small>
+<hr>
+<br/>
+{{ post.body}}
+
+<br><br>
+<a href="{% url 'home' %}" class="btn btn-light">Back to Home</a>
+{%endblock%}
