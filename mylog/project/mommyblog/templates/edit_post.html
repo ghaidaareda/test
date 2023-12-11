@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<h1>Edit post</h1>
+<br/>
+<div class="form-group">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-secondary">edit</button>
+</div>
+{% else %}
+    <h3>you are not authenticated !!</h3>
+{% endif %}
+{% endblock %}
